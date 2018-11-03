@@ -2,7 +2,7 @@
 
 Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.html#tutorial3) at [CNSM](http://cnsm-conf.org/2018/) on Friday, 9th November 2018. Note that this file only contains all relevant information necessary to complete the exercises, and most of the language specification has been taken from https://solidity.readthedecos.io.
 
-## Abstract
+## Abstract
 
 Blockchains and Smart Contracts are more recent technologies and they help building the foundation of a truly distributed digital society. This tutorial provides at first a basic theoretical introduction into blockchains and Smart Contracts and secondly a practical interaction with a blockchain and initial aspects for the development of Smart Contracts. Hence, the audience is guided through the deployment of an Ethereum Blockchain and the creation of an ERC20 token (Ethereum Request for Comment Number 20) using Smart Contracts. In this regard, besides the practical support of the instructors, the audience will receive a key basis and an introduction to major concepts and issues with respect to blockchains and Smart Contracts. At the end of the tutorial, the audience is expected to be not only able to create blockchains and Smart Contracts, but also to interact on a detailed technical level with these components.
 
