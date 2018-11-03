@@ -1,6 +1,6 @@
 # Smart Contracts Tutorial
 
-Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.html#tutorial3) at [CNSM](http://cnsm-conf.org/2018/) on Friday, 9th November 2018. Note that this file only contains all relevant information necessary to complete the exercises, and most of the language specification has been taken from https://solidity.readthedecos.io.
+Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.html#tutorial3) at [CNSM](http://cnsm-conf.org/2018/) in Rome 🇮🇹 on Friday, 9th November 2018. Note that this file only contains all relevant information necessary to complete the exercises, and most of the language specification has been taken from https://solidity.readthedecos.io.
 
 ## Abstract
 
