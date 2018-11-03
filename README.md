@@ -78,12 +78,11 @@ Let’s inspect above code line by line:
 This contract does not do much yet apart from allowing anyone to store a single number that is accessible by anyone in the world without a (feasible) way to prevent you from publishing this number.
 
 ## Solidity
-
 Solidity is a JavaScript like a language used to code smart contracts on the Ethereum platform. It compiles into a bytecode format that is understood by the Ethereum Virtual machine ([EVM](https://blog.qtum.org/diving-into-the-ethereum-vm-6e8d5d2f3c30)). It’s a strongly typed language, supports inheritance, libraries and has the ability to define custom data structures. The best way to try out Solidity right now is using [Remix](http://remix.ethereum.org/).
 
 This section should provide the essentials of what you need to know about Solidity to solve the exercises. If something is missing here or if you need further information about a topic, pleace conduct the official documentation at <https://solidity.readthedocs.io>.
 
-### Version Pragma
+### Version Pragma
 
 Source files can (and should) be annotated with a so-called version pragma to reject being compiled with future compiler versions that might introduce incompatible changes.
 
@@ -93,7 +92,7 @@ pragma solidity ^0.4.24
 
 Such a source file will not compile with a compiler earlier than version `0.4.24` and it will also not work on a compiler starting from version `0.5.0` (this second condition is added by using `^`). The idea behind this is that there will be no breaking changes until version `0.5.0`, so we can always be sure that our code will compile the way we intended it to.
 
-### Comments
+### Comments
 
 Single-line comments (`//`) and multi-line comments (`/*...*/`) are possible.
 
@@ -106,7 +105,7 @@ a multi-line comment.
 */
 ```
 
-### State Variables
+### State Variables
 
 State variables are values which are permanently stored in contract storage.
 
@@ -118,7 +117,7 @@ contract SimpleStorage {
 }
 ```
 
-### Types
+### Types
 
 Solidity is a statically typed language, which means that the type of each variable (state and local) needs to be specified (or at least known - see [Type Deduction](https://solidity.readthedocs.io/en/v0.4.24/types.html#type-deduction) below) at compile-time. Solidity provides several elementary types which can be combined to form complex types.
 
@@ -158,7 +157,7 @@ string foo = "foo"
 string bar = 'bar'
 ```
 
-### Arrays
+### Arrays
 
 Arrays can have a compile-time fixed size or they can be dynamic. An array of fixed size `k` and element type `T` is
 written as `T[k]`, an array of dynamic size as `T[]` .
@@ -169,7 +168,7 @@ bytes32[] names; // dynamic array
 uint newLength = names.push("John"); // adding returns new length of the array
 ```
 
-### Mappings
+### Mappings
 
 A mapping is referred to a hash table, which consists of a key type and a value type. We define a mapping like any other variable type.
 
@@ -192,6 +191,7 @@ Note that `1 ether == 10**18 wei`, `1 szabo == 10**12 wei`, `1 finney == 10**15 
 Suffixes like seconds, minutes, hours, days, weeks and years after literal numbers can be used to convert between units of time where seconds are the base unit, e.g., `1 minutes == 60 seconds`.
 
 ### Globally Available Variables
+
 There are special variables and functions which always exist in the global namespace and are mainly used to provide information about the blockchain or are general-use utility functions.
 
 ```javascript
@@ -202,7 +202,8 @@ msg.sender   // Type: address, returns the sender of the message (current call)
 msg.value    // Type: uint, returns the number of wei sent with the message
 ```
 
-### Functions
+### Functions
+
 Functions are the executable units of code within a contract. The function below is a payable function that accepts Ether.
 
 ```javascript
@@ -222,7 +223,8 @@ function setCounter(uint256 _newValue) public {
 
 There are also a few special function types that need further explanation.
 
-#### View Functions
+#### View Functions
+
 Functions can be declared `view` in which case they promise not to modify the state.
 
 ```javascript
@@ -233,6 +235,7 @@ function getCounter() public view returns (uint256) {
 ```
 
 #### Pure Functions
+
 Functions can be declared `pure` in which case they promise not to read from or modify the state.
 
 ```javascript
@@ -242,6 +245,7 @@ function multiply(uint256 a, uint256 b) public pure returns (uint256) {
 ```
 
 #### Fallback Functions
+
 A contract can have exactly one unnamed function. This function cannot have arguments and cannot return anything. It is executed on a call to the contract if none of the other functions match the given function identifier (or if no data was supplied at all).
 
 Furthermore, this function is executed whenever the contract receives plain Ether (without data).  Additionally, in order to receive Ether, the fallback function must be marked `payable`. If no such function exists, the contract cannot receive Ether through regular transactions.
@@ -272,7 +276,8 @@ function i(uint a, uint b) internal returns (uint) { return a + b; }
 
 Note that everything that is inside a contract is visible to all external observers. Making something `private` only prevents other contracts from accessing and modifying the information, but it will still be visible to the whole world outside of the blockchain.
 
-### Constructors
+### Constructors
+
 A constructor is an optional function declared with the constructor keyword which is executed upon contract creation. Constructor functions can be either public or internal. If there is no constructor, the contract will assume the default constructor: `contructor() public {}`.
 
 ```javascript
@@ -286,6 +291,7 @@ contract A {
 ```
 
 ### Error handling: Assert and Require
+
 Solidity uses state-reverting exceptions to handle errors. Such an exception will undo all changes made to the state in the current call (and all its sub-calls) and also flag an error to the caller. The convenience functions `assert` and `require` can be used to check for conditions and throw an exception if the condition is not met. The `assert` function should only be used to test for internal errors, and to check invariants. The `require` function should be used to ensure valid conditions, such as inputs, or contract state variables are met, or to validate return values from calls to external contracts. If used properly, analysis tools can evaluate your contract to identify the conditions and function calls which will reach a failing `assert`. Properly functioning code should never reach a failing assert statement; if this happens there is a bug in your contract which you should fix.
 
 ```javascript
@@ -334,15 +340,13 @@ Here’s what you’re looking at:
   * **Analysis**: The analysis tab gives detailed information about the contract code. It can help you avoid code mistakes and to enforce best practices.
   * **Debug**: This tab allows you to debug the transaction. It can be used to deploy transactions created from Remix and already mined transactions. (debugging works only if the current environment provides the necessary features).
 
-#### Tasks
-
 **1:** We will set the compiler to “Auto-Compile”. This way, Remix triggers a compilation each time the current file is changed or another file is selected. On the right, in the Compile tab, mark the checkbox “Auto-Compile” so that it is ticked.
 
 **2:** In the Run tab on the right side, choose “Web3 Provider” as your environment. Confirm the suggested endpoint <http://localhost:8545>.
 
-### Deploying our first contract
+### Deploying your first contract
 
-In this exercise we will deploy our first smart contract to our private Ethereum blockchain. 
+In this exercise you will deploy your first smart contract to your private Ethereum blockchain. 
 
 **1:** Using Remix, create a new file in the file explorer by pressing the `+`-Button in the upper left corner.
 Call the file `SimpleStorage.sol`.
