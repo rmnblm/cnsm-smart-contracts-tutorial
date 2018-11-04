@@ -16,7 +16,7 @@ Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.h
     7. [Mappings](#mappings)
     8. [Units](#units)
     9. [Globally Available Variables](#globally-available-variables)
-    10. [Functions (default, view, pure, payable)](#functions)
+    10. [Functions (view, pure, fallback)](#functions)
     11. [Visibility and Getters](#visibility-and-getters)
     12. [Constructors](#constructors)
     13. [Error handling: Assert and Require](#error-handling-assert-and-require)
