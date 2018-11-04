@@ -2,6 +2,32 @@
 
 Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.html#tutorial3) at [CNSM](http://cnsm-conf.org/2018/) in Rome 🇮🇹 on Friday, 9th November 2018. Note that this file only contains all relevant information necessary to complete the exercises, and most of the language specification has been taken from https://solidity.readthedecos.io.
 
+**Table of Contents**
+1. [Abstract](#abstract)
+2. [Introduction](#introduction)
+3. [Gas](#gas)
+4. [Solidity](#solidity)
+    1. [A Simple Smart Contract](#a-simple-smart-contract)
+    2. [Version Pragma](#version-pragma)
+    3. [Comments](#comments)
+    4. [State Variables](#state-variables)
+    5. [Types](#types)
+    6. [Arrays](#arrays)
+    7. [Mappings](#mappings)
+    8. [Units](#units)
+    9. [Globally Available Variables](#globally-available-variables)
+    10. [Functions](#functions)
+    11. [Visibility and Getters](#visibility-and-getters)
+    12. [Constructors](#constructors)
+    13. [Error handling: Assert and Require](#error-handling-assert-and-require)
+5. [Smart Contracts in Practice](#smart-contracts-in-practice)
+    1. [Setting up your development environment](#setting-up-your-development-environment)
+    2. [Deploying your first contract](#deploying-your-first-contract)
+    3. [Creating your own bank](#creating-your-own-bank)
+    4. [Creating your own crypto-currency](#creating-your-own-crypto-currency)
+6. [References](#references)
+7. [Appendix](#appendix)
+
 ## Abstract
 
 Blockchains and Smart Contracts are more recent technologies and they help building the foundation of a truly distributed digital society. This tutorial provides at first a basic theoretical introduction into blockchains and Smart Contracts and secondly a practical interaction with a blockchain and initial aspects for the development of Smart Contracts. Hence, the audience is guided through the deployment of an Ethereum Blockchain and the creation of an ERC20 token (Ethereum Request for Comment Number 20) using Smart Contracts. In this regard, besides the practical support of the instructors, the audience will receive a key basis and an introduction to major concepts and issues with respect to blockchains and Smart Contracts. At the end of the tutorial, the audience is expected to be not only able to create blockchains and Smart Contracts, but also to interact on a detailed technical level with these components.
@@ -39,7 +65,12 @@ When you hear gas, the person is either talking about:
 
 The total cost of a transaction (the "TX fee") is the `Gas Limit * Gas Price`.
 
-## A Simple Smart Contract
+## Solidity
+Solidity is a JavaScript like a language used to code smart contracts on the Ethereum platform. It compiles into a bytecode format that is understood by the Ethereum Virtual machine ([EVM](https://blog.qtum.org/diving-into-the-ethereum-vm-6e8d5d2f3c30)). It’s a strongly typed language, supports inheritance, libraries and has the ability to define custom data structures. The best way to try out Solidity right now is using [Remix](http://remix.ethereum.org/).
+
+This section should provide the essentials of what you need to know about Solidity to solve the exercises. If something is missing here or if you need further information about a topic, pleace conduct the official documentation at <https://solidity.readthedocs.io>.
+
+### A Simple Smart Contract
 
 A contract in the sense of Solidity is a collection of code (its functions) and data (its state) that resides at a specific address on the Ethereum blockchain.
 
@@ -76,11 +107,6 @@ Let’s inspect above code line by line:
 * Line 14 to 16: This function can be used to retrieve the value of the variable `storedData`.
 
 This contract does not do much yet apart from allowing anyone to store a single number that is accessible by anyone in the world without a (feasible) way to prevent you from publishing this number.
-
-## Solidity
-Solidity is a JavaScript like a language used to code smart contracts on the Ethereum platform. It compiles into a bytecode format that is understood by the Ethereum Virtual machine ([EVM](https://blog.qtum.org/diving-into-the-ethereum-vm-6e8d5d2f3c30)). It’s a strongly typed language, supports inheritance, libraries and has the ability to define custom data structures. The best way to try out Solidity right now is using [Remix](http://remix.ethereum.org/).
-
-This section should provide the essentials of what you need to know about Solidity to solve the exercises. If something is missing here or if you need further information about a topic, pleace conduct the official documentation at <https://solidity.readthedocs.io>.
 
 ### Version Pragma
 
@@ -316,7 +342,9 @@ Note that this function should not be used in production since a few more checks
 
 ## Smart Contracts in Practice
 
-### Setting up our development environment
+Now that we have a brief understanding of Solidity and how smart contracts work, let's put it into practice.
+
+### Setting up your development environment
 
 This part focuses on using Remix IDE, which is a browser based smart contract IDE. Remix is a good solution if you intend to:
 * develop smart contracts (Remix integrates a Solidity editor.)
