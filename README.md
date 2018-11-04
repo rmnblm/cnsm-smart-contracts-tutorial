@@ -2,7 +2,7 @@
 
 Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.html#tutorial3) at [CNSM](http://cnsm-conf.org/2018/) in Rome 🇮🇹 on Friday, 9th November 2018. Note that this file only contains all relevant information necessary to complete the exercises, and most of the language specification has been taken from https://solidity.readthedecos.io.
 
-**Table of Contents**
+## Table of Contents
 1. [Abstract](#abstract)
 2. [Introduction](#introduction)
 3. [Gas](#gas)
@@ -16,7 +16,7 @@ Handout for the smart contracts [tutorial](http://cnsm-conf.org/2018/tutorials.h
     7. [Mappings](#mappings)
     8. [Units](#units)
     9. [Globally Available Variables](#globally-available-variables)
-    10. [Functions](#functions)
+    10. [Functions (default, view, pure, payable)](#functions)
     11. [Visibility and Getters](#visibility-and-getters)
     12. [Constructors](#constructors)
     13. [Error handling: Assert and Require](#error-handling-assert-and-require)
@@ -76,7 +76,7 @@ A contract in the sense of Solidity is a collection of code (its functions) and 
 
 Let us begin with the most basic example. It is fine if you do not understand everything right now, we will go into more detail later.
 
-```javascript
+```solidity
 1  pragma solidity ^0.4.24;
 2
 3  contract SimpleStorage {
@@ -112,7 +112,7 @@ This contract does not do much yet apart from allowing anyone to store a single 
 
 Source files can (and should) be annotated with a so-called version pragma to reject being compiled with future compiler versions that might introduce incompatible changes.
 
-```javascript
+```solidity
 pragma solidity ^0.4.24
 ```
 
@@ -122,7 +122,7 @@ Such a source file will not compile with a compiler earlier than version `0.4.24
 
 Single-line comments (`//`) and multi-line comments (`/*...*/`) are possible.
 
-```javascript
+```solidity
 // This is a single-line comment
 
 /*
@@ -135,7 +135,7 @@ a multi-line comment.
 
 State variables are values which are permanently stored in contract storage.
 
-```javascript
+```solidity
 pragma solidity ^0.4.24;
 
 contract SimpleStorage {
@@ -147,7 +147,7 @@ contract SimpleStorage {
 
 Solidity is a statically typed language, which means that the type of each variable (state and local) needs to be specified (or at least known - see [Type Deduction](https://solidity.readthedocs.io/en/v0.4.24/types.html#type-deduction) below) at compile-time. Solidity provides several elementary types which can be combined to form complex types.
 
-```javascript
+```solidity
 // BOOLEAN VARIABLES
 // The possible values are constants true and false
 bool b = true;
@@ -188,7 +188,7 @@ string bar = 'bar'
 Arrays can have a compile-time fixed size or they can be dynamic. An array of fixed size `k` and element type `T` is
 written as `T[k]`, an array of dynamic size as `T[]` .
 
-```javascript
+```solidity
 bytes32[5] nicknames; // static array
 bytes32[] names; // dynamic array
 uint newLength = names.push("John"); // adding returns new length of the array
@@ -198,7 +198,7 @@ uint newLength = names.push("John"); // adding returns new length of the array
 
 A mapping is referred to a hash table, which consists of a key type and a value type. We define a mapping like any other variable type.
 
-```javascript
+```solidity
 mapping (string => uint) public balances;
 balances["charles"] = 1;
 console.log(balances["dave"]);    // is 0, all non-set key values return zeroes
@@ -220,7 +220,7 @@ Suffixes like seconds, minutes, hours, days, weeks and years after literal numbe
 
 There are special variables and functions which always exist in the global namespace and are mainly used to provide information about the blockchain or are general-use utility functions.
 
-```javascript
+```solidity
 block.number // Type: uint, returns the current block number
 gasleft()    // Type: uint, returns the remaining gas
 msg.data     // Type: bytes, returns complete calldata
@@ -232,7 +232,7 @@ msg.value    // Type: uint, returns the number of wei sent with the message
 
 Functions are the executable units of code within a contract. The function below is a payable function that accepts Ether.
 
-```javascript
+```solidity
 function bid() public payable { // Payable Function
     // access the amount of Ether with msg.value
 }
@@ -240,7 +240,7 @@ function bid() public payable { // Payable Function
 
 Functions neither declared `pure` nor `view`(explained below) can read and modify the state.
 
-```javascript
+```solidity
 uint256 counter;
 function setCounter(uint256 _newValue) public {
     counter = _newValue;
@@ -253,7 +253,7 @@ There are also a few special function types that need further explanation.
 
 Functions can be declared `view` in which case they promise not to modify the state.
 
-```javascript
+```solidity
 uint256 counter;
 function getCounter() public view returns (uint256) {
     return counter;
@@ -264,7 +264,7 @@ function getCounter() public view returns (uint256) {
 
 Functions can be declared `pure` in which case they promise not to read from or modify the state.
 
-```javascript
+```solidity
 function multiply(uint256 a, uint256 b) public pure returns (uint256) {
     return a * b;
 }
@@ -276,7 +276,7 @@ A contract can have exactly one unnamed function. This function cannot have argu
 
 Furthermore, this function is executed whenever the contract receives plain Ether (without data).  Additionally, in order to receive Ether, the fallback function must be marked `payable`. If no such function exists, the contract cannot receive Ether through regular transactions.
 
-```javascript
+```solidity
 function() public payable {
     // access Ether with msg.value
 }
@@ -293,7 +293,7 @@ Functions can be specified as being external, public, internal or private, where
 * `internal`: Those functions and state variables can only be accessed internally (i.e. from within the current contract or contracts deriving from it), without using `this`.
 * `private`: Private functions and state variables are only visible for the contract they are defined in and not in derived contracts.
 
-```javascript
+```solidity
 function f(uint a) private returns (uint) { return a + 1; }
 function g(uint a) public { data = a; }
 function h() external returns (uint) { return data; }
@@ -306,7 +306,7 @@ Note that everything that is inside a contract is visible to all external observ
 
 A constructor is an optional function declared with the constructor keyword which is executed upon contract creation. Constructor functions can be either public or internal. If there is no constructor, the contract will assume the default constructor: `contructor() public {}`.
 
-```javascript
+```solidity
 contract A {
     uint256 public a;
 
@@ -320,7 +320,7 @@ contract A {
 
 Solidity uses state-reverting exceptions to handle errors. Such an exception will undo all changes made to the state in the current call (and all its sub-calls) and also flag an error to the caller. The convenience functions `assert` and `require` can be used to check for conditions and throw an exception if the condition is not met. The `assert` function should only be used to test for internal errors, and to check invariants. The `require` function should be used to ensure valid conditions, such as inputs, or contract state variables are met, or to validate return values from calls to external contracts. If used properly, analysis tools can evaluate your contract to identify the conditions and function calls which will reach a failing `assert`. Properly functioning code should never reach a failing assert statement; if this happens there is a bug in your contract which you should fix.
 
-```javascript
+```solidity
 mapping (address => uint256) public balanceOf;
 
 function transfer(address _from, address _to, uint256 _value) public {
@@ -381,7 +381,7 @@ Call the file `SimpleStorage.sol`.
 
 **2:** In the editor, type in the following contract:
 
-```javascript
+```solidity
 pragma solidity ^0.4.24;
 
 contract SimpleStorage {
@@ -409,7 +409,7 @@ In this exercise, we will create our own bank that can hold balances of our clie
 
 Our code looks like this:
 
-```javascript
+```solidity
 pragma solidity ^0.4.24;
 
 contract MyBank {
@@ -439,7 +439,7 @@ Note that the `getBalance` function is not necessary if you would set the mappin
 
 **2:** In the following exercises, we need our contract address. Recall that you can easily query your wallet's address by running the following command in geth: 
 
-```javascript
+```bash
 > personal.listAccounts
 ["0x59a6e02da587bfe3776d7c1f35a9c837cc2070bc", "0xd2df134efc0dec93da3344e7f5b565a366e52577"]
 ```
@@ -448,7 +448,7 @@ If you have more than one account, the command will show you more addresses.
 
 Also make sure that you have unlocked both of your accounts, otherwise you will get a `authentication needed: password or unlock` error. You can unlock both of your accounts for an indefinitie time by the following geth-commands (replace `password` with the password you set before):
 
-```javascript
+```bash
 > personal.unlockAccount(eth.accounts[0], "password", 0)
 > personal.unlockAccount(eth.accounts[1], "password", 0)
 ```
@@ -473,7 +473,7 @@ You can also copy your address in the "Run"-tab by clicking the following symbol
 
 **7:** We will start with the `getBalance` method. Our goal is that only you, as the caller of the function, can get your balance. We use the globally available variable `msg.sender`, which holds caller's address of the function.
 
-```javascript
+```solidity
 // Returns the balance of the caller of the method
 function getBalance() view public returns (uint256) {
     return balances[msg.sender];
@@ -482,7 +482,7 @@ function getBalance() view public returns (uint256) {
 
 **8:** We have to make sure that only the owner of the bank, i.e., the owner of the contract, can set balances of clients. Our goal is to restrict who can make modifications to your contract’s state or call your contract’s functions. We do this by setting owner on contract creation, i.e., we set the owner in the constructor of the contract, since the constructor is executed only once during the whole lifetime.
 
-```javascript
+```solidity
 // The owner of the bank
 address owner;
 
@@ -493,7 +493,7 @@ constructor() public {
 
 Then we are able to authorize the accessing user of the `setBalance` method by requiring the caller of the function to equal to the owner of the contract. If this is not the case, the call is unauthorized and the transaction is aborted.
 
-```javascript
+```solidity
 // Sets the balance of the caller of the address
 function setBalance(uint256 _newBalance, address _address) public {
     require(msg.sender == owner, "Unauthorized");
@@ -503,7 +503,7 @@ function setBalance(uint256 _newBalance, address _address) public {
 
 **9:** In the end, our secure bank looks like this:
 
-```javascript
+```solidity
 pragma solidity ^0.4.24;
 
 contract MySecureBank {
@@ -545,7 +545,7 @@ You can change accounts in the upper right of the "Run" tab.
 
 **11:** Using your second account, try to set the balance of yourself. Make sure you use the correct address, i.e., the address of the second account. Also make sure that you have enough Ether in your second account to send a transaction to the network. Otherwise, transfer some Ether from your first to your second account with the following command:
 
-```javascript
+```solidity
 eth.sendTransaction({from: eth.accounts[0], to: eth.accounts[1], value: web3.toWei(2, "ether")})
 ```
 
@@ -569,7 +569,7 @@ We are going to create a digital token. Tokens in the Ethereum ecosystem can rep
 
 The standard ERC20 token contract can be quite complex. But in essence a very basic token boils down to this:
 
-```javascript
+```solidity
 contract ERC20 {
     // Public variables of the token
     string public constant name = "Your Token Name";
@@ -608,7 +608,7 @@ You can find the solution in the appendix.
 
 An example of an ERC20 token (including the additional requirement to be able to raise the total supply) could look like this:
 
-```javascript
+```solidity
 pragma solidity ^0.4.24;
 
 contract ERC20 {
